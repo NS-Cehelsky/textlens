@@ -54,8 +54,25 @@
     }
 
     .brand { margin-bottom: 48px; }
+    .brand-row { display: flex; align-items: flex-start; justify-content: space-between; }
     .brand-name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
     .brand-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .btn-lang {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-lang:hover { background: var(--accent-subtle); color: var(--accent); border-color: var(--accent); }
 
     .sidebar-section { margin-bottom: 36px; }
 
@@ -429,32 +446,37 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-name">TextLens</div>
-      <div class="brand-sub">AI analyzátor textu</div>
+      <div class="brand-row">
+        <div>
+          <div class="brand-name">TextLens</div>
+          <div class="brand-sub" data-i18n="brandSub">AI analyzátor textu</div>
+        </div>
+        <button class="btn-lang" id="langToggle" onclick="toggleLang()">EN</button>
+      </div>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">API kľúč</div>
+      <div class="sidebar-label" data-i18n="apiKeyLabel">API kľúč</div>
       <input type="password" id="apiKey" placeholder="gsk_..." autocomplete="off" />
-      <button class="btn-save" onclick="saveKey()">Uložiť kľúč</button>
-      <div class="api-status" id="apiStatus">Zadaj Groq API kľúč</div>
+      <button class="btn-save" onclick="saveKey()" data-i18n="saveKeyBtn">Uložiť kľúč</button>
+      <div class="api-status" id="apiStatus" data-i18n="apiStatusDefault">Zadaj Groq API kľúč</div>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">Režim analýzy</div>
+      <div class="sidebar-label" data-i18n="modeLabel">Režim analýzy</div>
       <nav class="mode-nav">
         <button class="mode-btn active" data-mode="summary" onclick="setMode(this)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M2 4h12M2 8h8M2 12h10" stroke-linecap="round"/>
           </svg>
-          Zhrnutie
+          <span data-i18n="modesSummary">Zhrnutie</span>
         </button>
         <button class="mode-btn" data-mode="keywords" onclick="setMode(this)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="6.5" cy="6.5" r="4"/>
             <path d="M11 11l3 3" stroke-linecap="round"/>
           </svg>
-          Kľúčové slová
+          <span data-i18n="modesKeywords">Kľúčové slová</span>
         </button>
         <button class="mode-btn" data-mode="sentiment" onclick="setMode(this)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -463,7 +485,7 @@
             <circle cx="6" cy="6.5" r=".6" fill="currentColor" stroke="none"/>
             <circle cx="10" cy="6.5" r=".6" fill="currentColor" stroke="none"/>
           </svg>
-          Sentiment
+          <span data-i18n="modesSentiment">Sentiment</span>
         </button>
         <button class="mode-btn" data-mode="explain" onclick="setMode(this)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -471,14 +493,14 @@
             <path d="M8 7.5v4" stroke-linecap="round"/>
             <circle cx="8" cy="5" r=".6" fill="currentColor" stroke="none"/>
           </svg>
-          Vysvetli jednoducho
+          <span data-i18n="modesExplain">Vysvetli jednoducho</span>
         </button>
         <button class="mode-btn" data-mode="studynotes" onclick="setMode(this)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="3" y="2" width="10" height="12" rx="1.5"/>
             <path d="M6 6h4M6 9h4M6 12h2" stroke-linecap="round"/>
           </svg>
-          Školské poznámky
+          <span data-i18n="modesStudynotes">Školské poznámky</span>
         </button>
       </nav>
     </div>
@@ -494,8 +516,8 @@
   <div class="main-inner">
 
     <div class="page-header">
-      <h1 class="page-title">Analyzuj text</h1>
-      <p class="page-desc">Nahraj súbory alebo vlož text priamo — vyber režim a spusti analýzu v slovenčine.</p>
+      <h1 class="page-title" data-i18n="pageTitle">Analyzuj text</h1>
+      <p class="page-desc" data-i18n="pageDesc">Nahraj súbory alebo vlož text priamo — vyber režim a spusti analýzu v slovenčine.</p>
     </div>
 
     <!-- Upload zone -->
@@ -507,8 +529,8 @@
         <path d="M16 22V10M10 16l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M6 24h20" stroke-linecap="round"/>
       </svg>
-      <div class="upload-zone-text" id="uploadZoneText">Klikni alebo pretiahni súbory sem</div>
-      <div class="upload-zone-sub">TXT, MD, PDF, DOCX · max 3 súbory</div>
+      <div class="upload-zone-text" id="uploadZoneText" data-i18n="uploadZoneText">Klikni alebo pretiahni súbory sem</div>
+      <div class="upload-zone-sub" data-i18n="uploadZoneSub">TXT, MD, PDF, DOCX · max 3 súbory</div>
     </div>
 
     <!-- File chips -->
@@ -516,8 +538,9 @@
 
     <!-- Text input -->
     <div class="input-card">
-      <div class="input-card-label" id="textareaLabel">Text na analýzu</div>
+      <div class="input-card-label" id="textareaLabel" data-i18n="textareaLabelEmpty">Text na analýzu</div>
       <textarea id="textInput"
+        data-i18n-placeholder="textareaPlaceholder"
         placeholder="Vlož sem akýkoľvek text — článok, esej, poznámky zo školy..."
         oninput="updateCount()"></textarea>
       <div class="input-card-footer">
@@ -529,7 +552,7 @@
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Analyzovať
+      <span data-i18n="analyzeBtn">Analyzovať</span>
     </button>
 
     <div class="loading-track" id="loadingTrack"><div class="loading-fill"></div></div>
@@ -537,7 +560,7 @@
 
     <div class="results" id="results">
       <div class="results-meta">
-        <span class="results-heading">Výsledok analýzy</span>
+        <span class="results-heading" data-i18n="resultsHeading">Výsledok analýzy</span>
         <span class="results-tag" id="resultsTag">—</span>
       </div>
       <div class="stats-grid" id="statsGrid"></div>
@@ -556,20 +579,113 @@
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   const MAX_FILES = 3;
-  let uploadedFiles = []; // [{name, text, status}]
+  let uploadedFiles = [];
   let currentMode = 'summary';
   let apiKey = '';
+  let currentLang = localStorage.getItem('textlens_lang') || 'sk';
+  let apiStatusKey = 'apiStatusDefault';
+
+  // ── Translations ──
+
+  const translations = {
+    sk: {
+      brandSub: 'AI analyzátor textu',
+      apiKeyLabel: 'API kľúč',
+      saveKeyBtn: 'Uložiť kľúč',
+      apiStatusDefault: 'Zadaj Groq API kľúč',
+      modeLabel: 'Režim analýzy',
+      modesSummary: 'Zhrnutie',
+      modesKeywords: 'Kľúčové slová',
+      modesSentiment: 'Sentiment',
+      modesExplain: 'Vysvetli jednoducho',
+      modesStudynotes: 'Školské poznámky',
+      pageTitle: 'Analyzuj text',
+      pageDesc: 'Nahraj súbory alebo vlož text priamo — vyber režim a spusti analýzu v slovenčine.',
+      uploadZoneText: 'Klikni alebo pretiahni súbory sem',
+      uploadZoneSub: 'TXT, MD, PDF, DOCX · max 3 súbory',
+      textareaLabelEmpty: 'Text na analýzu',
+      textareaLabelFilled: 'Doplňujúci text (voliteľné)',
+      textareaPlaceholder: 'Vlož sem akýkoľvek text — článok, esej, poznámky zo školy...',
+      charCountFmt: (c, w) => `${c} znakov · ${w} slov`,
+      analyzeBtn: 'Analyzovať',
+      analyzingBtn: 'Analyzujem...',
+      resultsHeading: 'Výsledok analýzy',
+      statWords: 'Slov',
+      statSentences: 'Viet',
+      statReadTime: 'Čítanie',
+      uploadLimitReached: (n) => `Dosiahnutý limit (${n}/${n} súborov)`,
+      uploadAddMore: (c, n) => `Pridať ďalší súbor (${c}/${n})`,
+      chipError: 'Chyba',
+      chipRemoveTitle: 'Odstrániť',
+      errUnsupported: (ext) => `Nepodporovaný formát: .${ext}`,
+      errInvalidKey: 'Neplatný kľúč — musí začínať gsk_',
+      errKeySaved: 'Kľúč uložený',
+      errNoKey: 'Najprv ulož Groq API kľúč.',
+      errFilesLoading: 'Počkaj, súbory sa ešte načítavajú...',
+      errNoText: 'Vlož text alebo nahraj súbory na analýzu.',
+      errPrefix: 'Chyba: ',
+      systemPrompt: 'Si expert analytik textu. Vždy odpovedáš v slovenčine, presne podľa požadovaného formátu.',
+    },
+    en: {
+      brandSub: 'AI text analyzer',
+      apiKeyLabel: 'API Key',
+      saveKeyBtn: 'Save key',
+      apiStatusDefault: 'Enter your Groq API key',
+      modeLabel: 'Analysis mode',
+      modesSummary: 'Summary',
+      modesKeywords: 'Keywords',
+      modesSentiment: 'Sentiment',
+      modesExplain: 'Explain simply',
+      modesStudynotes: 'Study notes',
+      pageTitle: 'Analyze text',
+      pageDesc: 'Upload files or paste text directly — select a mode and run the analysis.',
+      uploadZoneText: 'Click or drag files here',
+      uploadZoneSub: 'TXT, MD, PDF, DOCX · max 3 files',
+      textareaLabelEmpty: 'Text to analyze',
+      textareaLabelFilled: 'Additional text (optional)',
+      textareaPlaceholder: 'Paste any text here — article, essay, school notes...',
+      charCountFmt: (c, w) => `${c} characters · ${w} words`,
+      analyzeBtn: 'Analyze',
+      analyzingBtn: 'Analyzing...',
+      resultsHeading: 'Analysis result',
+      statWords: 'Words',
+      statSentences: 'Sentences',
+      statReadTime: 'Read time',
+      uploadLimitReached: (n) => `Limit reached (${n}/${n} files)`,
+      uploadAddMore: (c, n) => `Add another file (${c}/${n})`,
+      chipError: 'Error',
+      chipRemoveTitle: 'Remove',
+      errUnsupported: (ext) => `Unsupported format: .${ext}`,
+      errInvalidKey: 'Invalid key — must start with gsk_',
+      errKeySaved: 'Key saved',
+      errNoKey: 'Save your Groq API key first.',
+      errFilesLoading: 'Please wait, files are still loading...',
+      errNoText: 'Enter text or upload files for analysis.',
+      errPrefix: 'Error: ',
+      systemPrompt: 'You are an expert text analyst. Always respond in English, following the exact requested format.',
+    }
+  };
 
   const modeLabels = {
-    summary: 'Zhrnutie',
-    keywords: 'Kľúčové slová',
-    sentiment: 'Sentiment',
-    explain: 'Jednoduché vysvetlenie',
-    studynotes: 'Školské poznámky'
+    sk: {
+      summary: 'Zhrnutie',
+      keywords: 'Kľúčové slová',
+      sentiment: 'Sentiment',
+      explain: 'Jednoduché vysvetlenie',
+      studynotes: 'Školské poznámky'
+    },
+    en: {
+      summary: 'Summary',
+      keywords: 'Keywords',
+      sentiment: 'Sentiment',
+      explain: 'Simple explanation',
+      studynotes: 'Study notes'
+    }
   };
 
   const modePrompts = {
-    summary: `Analyzuj nasledujúci text a vytvor stručné, jasné zhrnutie v slovenčine.
+    sk: {
+      summary: `Analyzuj nasledujúci text a vytvor stručné, jasné zhrnutie v slovenčine.
 Formát odpovede:
 **Hlavná myšlienka:** (1-2 vety)
 
@@ -580,7 +696,7 @@ Formát odpovede:
 
 **Záver:** (1 veta)`,
 
-    keywords: `Analyzuj nasledujúci text a extrahuj kľúčové slová a témy v slovenčine.
+      keywords: `Analyzuj nasledujúci text a extrahuj kľúčové slová a témy v slovenčine.
 Formát odpovede:
 **Hlavné témy:** (3-5 tém)
 
@@ -590,7 +706,7 @@ Formát odpovede:
 
 **Odporúčané súvisiace témy na štúdium:** (2-3 tipy)`,
 
-    sentiment: `Analyzuj tón a sentiment nasledujúceho textu v slovenčine.
+      sentiment: `Analyzuj tón a sentiment nasledujúceho textu v slovenčine.
 Formát odpovede:
 **Celkový sentiment:** Pozitívny / Negatívny / Neutrálny / Zmiešaný
 
@@ -602,7 +718,7 @@ Formát odpovede:
 
 **Charakteristické výrazy:** (citácie z textu ktoré určujú sentiment)`,
 
-    explain: `Vysvetli nasledujúci text veľmi jednoducho, akoby si vysvetľoval 15-ročnému v slovenčine.
+      explain: `Vysvetli nasledujúci text veľmi jednoducho, akoby si vysvetľoval 15-ročnému v slovenčine.
 Bez žargónu, bez komplikovaných pojmov.
 Formát odpovede:
 **O čom to je:** (1 jednoduchá veta)
@@ -613,7 +729,7 @@ Formát odpovede:
 
 **Analógia:** (prirovnaj to k niečomu z každodenného života)`,
 
-    studynotes: `Vytvor perfektné školské poznámky z nasledujúceho textu v slovenčine.
+      studynotes: `Vytvor perfektné školské poznámky z nasledujúceho textu v slovenčine.
 Formát odpovede:
 **Téma:** (názov)
 
@@ -631,7 +747,114 @@ Formát odpovede:
 3. otázka 3
 
 **Tip na zapamätanie:** (mnemotechnická pomôcka alebo zaujímavosť)`
+    },
+
+    en: {
+      summary: `Analyze the following text and create a concise, clear summary in English.
+Response format:
+**Main idea:** (1-2 sentences)
+
+**Key points:**
+- point 1
+- point 2
+- point 3
+
+**Conclusion:** (1 sentence)`,
+
+      keywords: `Analyze the following text and extract key words and topics in English.
+Response format:
+**Main topics:** (3-5 topics)
+
+**Keywords:** (8-12 words separated by commas)
+
+**Text category:** (e.g. science, history, technology...)
+
+**Suggested related topics to study:** (2-3 tips)`,
+
+      sentiment: `Analyze the tone and sentiment of the following text in English.
+Response format:
+**Overall sentiment:** Positive / Negative / Neutral / Mixed
+
+**Text tone:** (e.g. formal, academic, emotional...)
+
+**Intensity:** (1-10) and why
+
+**Explanation:** (2-3 sentences about why the text has this sentiment)
+
+**Characteristic expressions:** (quotes from the text that determine sentiment)`,
+
+      explain: `Explain the following text very simply, as if explaining to a 15-year-old in English.
+No jargon, no complex terms.
+Response format:
+**What it's about:** (1 simple sentence)
+
+**How it works / What happened:** (3-5 simple sentences)
+
+**Why it matters:** (1-2 sentences)
+
+**Analogy:** (compare it to something from everyday life)`,
+
+      studynotes: `Create perfect study notes from the following text in English.
+Response format:
+**Topic:** (title)
+
+**What I need to know:**
+- most important point 1
+- most important point 2
+- most important point 3
+
+**Details:**
+(more detailed overview)
+
+**Possible exam questions:**
+1. question 1
+2. question 2
+3. question 3
+
+**Memory tip:** (mnemonic device or interesting fact)`
+    }
   };
+
+  // ── i18n ──
+
+  function applyLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('textlens_lang', lang);
+    document.documentElement.lang = lang;
+
+    const tr = translations[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (tr[key] !== undefined) el.textContent = tr[key];
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (tr[key] !== undefined) el.placeholder = tr[key];
+    });
+
+    // Restore the current api status text in the new language
+    const statusEl = document.getElementById('apiStatus');
+    if (tr[apiStatusKey] !== undefined) {
+      statusEl.textContent = tr[apiStatusKey];
+    }
+
+    document.getElementById('langToggle').textContent = lang === 'sk' ? 'EN' : 'SK';
+
+    updateUploadZone();
+    updateTextareaLabel();
+    updateCount();
+
+    const btn = document.getElementById('analyzeBtn');
+    if (!btn.disabled) {
+      btn.querySelector('[data-i18n]').textContent = tr.analyzeBtn;
+    }
+  }
+
+  function toggleLang() {
+    applyLang(currentLang === 'sk' ? 'en' : 'sk');
+  }
 
   // ── File upload handling ──
 
@@ -664,7 +887,7 @@ Formát odpovede:
     for (const file of toProcess) {
       const ext = file.name.split('.').pop().toLowerCase();
       if (!['txt', 'md', 'pdf', 'docx'].includes(ext)) {
-        showError(`Nepodporovaný formát: .${ext}`);
+        showError(translations[currentLang].errUnsupported(ext));
         continue;
       }
 
@@ -729,6 +952,7 @@ Formát odpovede:
   }
 
   function renderChips() {
+    const tr = translations[currentLang];
     const container = document.getElementById('fileChips');
     container.innerHTML = uploadedFiles.map((f, i) => `
       <div class="file-chip">
@@ -738,9 +962,9 @@ Formát odpovede:
         </svg>
         <span class="file-chip-name" title="${escHtml(f.name)}">${escHtml(f.name)}</span>
         <span class="file-chip-status ${f.status}">
-          ${f.status === 'loading' ? '...' : f.status === 'ok' ? 'OK' : 'Chyba'}
+          ${f.status === 'loading' ? '...' : f.status === 'ok' ? 'OK' : tr.chipError}
         </span>
-        <button class="file-chip-remove" onclick="removeFile(${i})" title="Odstrániť">
+        <button class="file-chip-remove" onclick="removeFile(${i})" title="${tr.chipRemoveTitle}">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8">
             <path d="M2 2l8 8M10 2l-8 8" stroke-linecap="round"/>
           </svg>
@@ -753,22 +977,24 @@ Formát odpovede:
     const zone = document.getElementById('uploadZone');
     const txt = document.getElementById('uploadZoneText');
     const count = uploadedFiles.length;
+    const tr = translations[currentLang];
     if (count >= MAX_FILES) {
       zone.classList.add('full');
-      txt.textContent = `Dosiahnutý limit (${MAX_FILES}/${MAX_FILES} súborov)`;
+      txt.textContent = tr.uploadLimitReached(MAX_FILES);
     } else {
       zone.classList.remove('full');
       txt.textContent = count > 0
-        ? `Pridať ďalší súbor (${count}/${MAX_FILES})`
-        : 'Klikni alebo pretiahni súbory sem';
+        ? tr.uploadAddMore(count, MAX_FILES)
+        : tr.uploadZoneText;
     }
   }
 
   function updateTextareaLabel() {
     const label = document.getElementById('textareaLabel');
+    const tr = translations[currentLang];
     label.textContent = uploadedFiles.length > 0
-      ? 'Doplňujúci text (voliteľné)'
-      : 'Text na analýzu';
+      ? tr.textareaLabelFilled
+      : tr.textareaLabelEmpty;
   }
 
   function escHtml(str) {
@@ -779,12 +1005,15 @@ Formát odpovede:
 
   function saveKey() {
     const val = document.getElementById('apiKey').value.trim();
+    const tr = translations[currentLang];
     if (!val.startsWith('gsk_') || val.length < 20) {
-      setStatus('Neplatný kľúč — musí začínať gsk_', 'err');
+      apiStatusKey = 'errInvalidKey';
+      setStatus(tr.errInvalidKey, 'err');
       return;
     }
     apiKey = val;
-    setStatus('Kľúč uložený', 'ok');
+    apiStatusKey = 'errKeySaved';
+    setStatus(tr.errKeySaved, 'ok');
   }
 
   function setStatus(msg, cls) {
@@ -803,7 +1032,7 @@ Formát odpovede:
     const combined = getCombinedText();
     const chars = combined.length;
     const words = combined.trim() === '' ? 0 : combined.trim().split(/\s+/).length;
-    document.getElementById('charCount').textContent = `${chars} znakov · ${words} slov`;
+    document.getElementById('charCount').textContent = translations[currentLang].charCountFmt(chars, words);
   }
 
   function getCombinedText() {
@@ -823,13 +1052,14 @@ Formát odpovede:
   }
 
   async function analyze() {
-    if (!apiKey) { showError('Najprv ulož Groq API kľúč.'); return; }
+    const tr = translations[currentLang];
+    if (!apiKey) { showError(tr.errNoKey); return; }
 
     const loadingFiles = uploadedFiles.filter(f => f.status === 'loading');
-    if (loadingFiles.length > 0) { showError('Počkaj, súbory sa ešte načítavajú...'); return; }
+    if (loadingFiles.length > 0) { showError(tr.errFilesLoading); return; }
 
     const text = getCombinedText();
-    if (text.length < 30) { showError('Vlož text alebo nahraj súbory na analýzu.'); return; }
+    if (text.length < 30) { showError(tr.errNoText); return; }
 
     setLoading(true);
     hideError();
@@ -849,11 +1079,11 @@ Formát odpovede:
           messages: [
             {
               role: 'system',
-              content: 'Si expert analytik textu. Vždy odpovedáš v slovenčine, presne podľa požadovaného formátu.'
+              content: tr.systemPrompt
             },
             {
               role: 'user',
-              content: modePrompts[currentMode] + '\n\n---\nTEXT:\n' + text
+              content: modePrompts[currentLang][currentMode] + '\n\n---\nTEXT:\n' + text
             }
           ],
           temperature: 0.4,
@@ -870,7 +1100,7 @@ Formát odpovede:
       showResults(data.choices[0].message.content, stats);
 
     } catch (err) {
-      showError('Chyba: ' + err.message);
+      showError(tr.errPrefix + err.message);
     } finally {
       setLoading(false);
     }
@@ -880,28 +1110,30 @@ Formát odpovede:
     document.getElementById('loadingTrack').classList.toggle('active', on);
     const btn = document.getElementById('analyzeBtn');
     btn.disabled = on;
+    const tr = translations[currentLang];
     btn.innerHTML = on
-      ? '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6" stroke-dasharray="28" stroke-dashoffset="10"><animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="0.8s" repeatCount="indefinite"/></circle></svg> Analyzujem...'
-      : '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg> Analyzovať';
+      ? `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6" stroke-dasharray="28" stroke-dashoffset="10"><animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="0.8s" repeatCount="indefinite"/></circle></svg> ${tr.analyzingBtn}`
+      : `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-i18n="analyzeBtn">${tr.analyzeBtn}</span>`;
   }
 
   function showResults(text, stats) {
+    const tr = translations[currentLang];
     const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     document.getElementById('resultText').innerHTML = formatted;
-    document.getElementById('resultsTag').textContent = modeLabels[currentMode];
+    document.getElementById('resultsTag').textContent = modeLabels[currentLang][currentMode];
 
     document.getElementById('statsGrid').innerHTML = `
       <div class="stat-card">
         <span class="stat-value">${stats.words}</span>
-        <span class="stat-key">Slov</span>
+        <span class="stat-key">${tr.statWords}</span>
       </div>
       <div class="stat-card">
         <span class="stat-value">${stats.sentences}</span>
-        <span class="stat-key">Viet</span>
+        <span class="stat-key">${tr.statSentences}</span>
       </div>
       <div class="stat-card">
         <span class="stat-value">${stats.readTime} min</span>
-        <span class="stat-key">Čítanie</span>
+        <span class="stat-key">${tr.statReadTime}</span>
       </div>
     `;
 
@@ -918,6 +1150,9 @@ Formát odpovede:
   }
 
   function hideError() { document.getElementById('errorBox').classList.remove('visible'); }
+
+  // ── Init ──
+  applyLang(currentLang);
 </script>
 </body>
 </html>
